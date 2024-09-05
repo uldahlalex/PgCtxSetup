@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunittests", "xunittests\xunittests.csproj", "{1C28ECB8-05F3-46E9-BA42-E581C882A0A3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PgCtxSetup", "PgCtxSetup\PgCtxSetup.csproj", "{87B398BA-893F-4BFD-9027-3A164B65F874}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API", "API\API.csproj", "{2F88AA62-0C7D-41DA-83BC-3723F619717D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1C28ECB8-05F3-46E9-BA42-E581C882A0A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C28ECB8-05F3-46E9-BA42-E581C882A0A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C28ECB8-05F3-46E9-BA42-E581C882A0A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C28ECB8-05F3-46E9-BA42-E581C882A0A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87B398BA-893F-4BFD-9027-3A164B65F874}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87B398BA-893F-4BFD-9027-3A164B65F874}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87B398BA-893F-4BFD-9027-3A164B65F874}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87B398BA-893F-4BFD-9027-3A164B65F874}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F88AA62-0C7D-41DA-83BC-3723F619717D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F88AA62-0C7D-41DA-83BC-3723F619717D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F88AA62-0C7D-41DA-83BC-3723F619717D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F88AA62-0C7D-41DA-83BC-3723F619717D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
