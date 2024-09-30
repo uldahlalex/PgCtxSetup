@@ -12,22 +12,27 @@ namespace PgCtx
         public TContext DbContextInstance { get; private set; }
         public IServiceProvider ServiceProviderInstance { get; }
 
-        private readonly PostgreSqlContainer _postgres;
+        public PostgreSqlContainer _postgres { get; set; }
+
+        private readonly string _databaseName;
 
         public PgCtxSetup(
             string postgresImage = "postgres:16-alpine",
             Action<DbContextOptionsBuilder> configureDbContext = null,
             Action<IServiceCollection> configureServices = null)
         {
+            _databaseName = $"test_db_{Guid.NewGuid():N}";
+
             _postgres = new PostgreSqlBuilder()
                 .WithImage(postgresImage)
+                .WithDatabase(_databaseName)
                 .Build();
-
             var configureDbContext1 = configureDbContext;
             configureDbContext1 ??= optionsBuilder =>
             {
                 optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
                 optionsBuilder.UseNpgsql(_postgres.GetConnectionString());
+                
             };
 
             AsyncHelper.RunSync(() => _postgres.StartAsync());
