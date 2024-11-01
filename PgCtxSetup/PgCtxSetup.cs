@@ -1,6 +1,8 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Testcontainers.PostgreSql;
@@ -27,12 +29,12 @@ namespace PgCtx
                 .WithImage(postgresImage)
                 .WithDatabase(_databaseName)
                 .Build();
+
             var configureDbContext1 = configureDbContext;
             configureDbContext1 ??= optionsBuilder =>
             {
                 optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
                 optionsBuilder.UseNpgsql(_postgres.GetConnectionString());
-                
             };
 
             AsyncHelper.RunSync(() => _postgres.StartAsync());
@@ -40,11 +42,30 @@ namespace PgCtx
             var optionsBuilder = new DbContextOptionsBuilder<TContext>();
             configureDbContext1.Invoke(optionsBuilder);
 
-            DbContextInstance = (TContext)Activator.CreateInstance(typeof(TContext), optionsBuilder.Options);
+            // Create instance based on whether it's an IdentityDbContext or regular DbContext
+            if (typeof(TContext).IsSubclassOf(typeof(IdentityDbContext)) ||
+                (typeof(TContext).IsGenericType && typeof(TContext).GetGenericTypeDefinition() == typeof(IdentityDbContext<>)))
+            {
+                DbContextInstance = (TContext)Activator.CreateInstance(typeof(TContext), optionsBuilder.Options);
+            }
+            else
+            {
+                DbContextInstance = (TContext)Activator.CreateInstance(typeof(TContext), optionsBuilder.Options);
+            }
 
             AsyncHelper.RunSync(() => DbContextInstance.Database.EnsureCreatedAsync());
 
             var services = new ServiceCollection();
+            
+            // Configure Identity services if using IdentityDbContext
+            if (typeof(TContext).IsSubclassOf(typeof(IdentityDbContext)) ||
+                (typeof(TContext).IsGenericType && typeof(TContext).GetGenericTypeDefinition() == typeof(IdentityDbContext<>)))
+            {
+                services.AddIdentity<IdentityUser, IdentityRole>()
+                    .AddEntityFrameworkStores<TContext>()
+                    .AddDefaultTokenProviders();
+            }
+
             services.AddSingleton(DbContextInstance ?? throw new InvalidOperationException("DbContextInstance is null"));
 
             configureServices?.Invoke(services);
@@ -61,6 +82,7 @@ namespace PgCtx
         }
     }
 
+    // AsyncHelper class remains the same
     public static class AsyncHelper
     {
         private static readonly TaskFactory MyTaskFactory = new

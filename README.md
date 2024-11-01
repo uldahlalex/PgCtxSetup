@@ -1,3 +1,7 @@
+### News:
+
+#### PgCtxSetup now also works for context classes extending IdentityDbContext<T>!
+
 Example usage with or without service instantiation in service collection:
 
 ```csharp
